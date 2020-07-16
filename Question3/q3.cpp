@@ -3,6 +3,7 @@
 #include <vector>
 #include <iomanip>
 #include <climits>
+#include <string>
 
 using namespace std;
 
@@ -109,8 +110,49 @@ public:
         return destinationNode;
     }
     bool buildDPTable(){
-        // Fill here
+        //neg cycle the false 
+        if (false)
+        {
+            return false;
+        }
+
+        // create DPTable 2d array
+        int n = G.getNumberOfNodes();
         
+        int** DPTable = new int*[n];
+        for(int i = 0; i < n; i++)
+        {
+            DPTable[i] = new int[n];
+        }
+
+        for(int i= 0; i < n; i++)
+        {
+            for(int v = 0; v < n; v++)
+            {
+                if(i == 0)
+                {
+                    DPTable[i][v] = v == destinationNode ? 0 : INT_MAX ;
+                }
+                else
+                {
+                    int temp, min = DPTable[i-1][v];
+                    
+                    for (auto e : G.getOutgoingEdges(v))
+                    {
+                        if(DPTable[i-1][e.destinationNode] != INT_MAX)
+                        {
+                            temp = DPTable[i-1][e.destinationNode] + e.weight;
+                            if(temp<min) min = temp;
+                        }
+                    }
+                    DPTable[i][v] = min;
+                }
+            }
+        }
+        
+        // set M to DPTable
+        M = DPTable;
+        return true;
     }
     
     void printDPTable(){
