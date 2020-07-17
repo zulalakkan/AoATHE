@@ -52,26 +52,23 @@ void LinkedList :: moveToHead(Node* node)
 	{
 		return;
 	}
-	for(Node* n = node->prev; node != head; n = node->prev)
+
+	// remove node
+	node->prev->next = node->next;
+	if(node == tail) 
 	{
-		// swap node with its prev
-
-		if(node == tail)
-		{
-			tail = n;
-		}
-		if(n == head)
-		{
-			head = node;
-		}
-		n->next = node->next;
-		if(n->next != NULL) n->next->prev = n; // if n is not tail
-		node->next = n;
-
-		node->prev = n->prev;
-		if(node->prev != NULL) node->prev->next = node; // if node is not head
-		n->prev = node;
+		tail = node->prev;
 	}
+	else
+	{
+		node->next->prev = node->prev;
+	}
+
+	// add to head
+	node->next = head;
+	head->prev = node;
+	node->prev = NULL;
+	head = node;
 
 }
 
