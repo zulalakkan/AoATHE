@@ -202,6 +202,11 @@ public:
     
     void printShortestPathBetweenSourceAndDestination(){
         int shortestPathValue = M[G.getNumberOfNodes()-1][sourceNode];
+        if (shortestPathValue == INT_MAX)
+        {
+            cout << "There is not a path from " << sourceNode <<" to " << destinationNode << endl;
+            return;
+        }
         cout << endl << "Shortest path value from " << sourceNode << " to " << destinationNode << ": " << shortestPathValue << endl;
 
         vector<int> shortestPath = {sourceNode};
