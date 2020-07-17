@@ -119,7 +119,8 @@ public:
             DPTable[i] = new int[n];
         }
 
-        for(int i= 0; i < n; i++)
+        int i;
+        for(i= 0; i < n; i++)
         {
             for(int v = 0; v < n; v++)
             {
@@ -143,19 +144,29 @@ public:
                 }
             }
         }
+
         // check for negative cycle
-        for(int i = 0; i < n; i++)
+        for(int v = 0; v < n; v++)
         {
-            if (i != destinationNode)
+            int temp, min = DPTable[i-1][v];
+            
+            for (auto e : G.getOutgoingEdges(v))
             {
-                if(G.getWeightOfEdge(i,destinationNode)!=0 && G.getWeightOfEdge(i,destinationNode)!=0 > DPTable[n-1][i])
+                if(DPTable[i-1][e.destinationNode] != INT_MAX)
                 {
-                    cout << "Graph contains negative weight cycle!" << endl;
-                    graphContainsNegativeWeightCycle = true;
-                    return false;
+                    temp = DPTable[i-1][e.destinationNode] + e.weight;
+                    if(temp<min) min = temp;
                 }
             }
+            if (min < DPTable[i-1][v])
+            {
+                cout << "Graph contains negative weight cycle!" << endl;
+                graphContainsNegativeWeightCycle = true;
+                return false;
+                break;
+            }
         }
+        
         // set M to DPTable
         graphContainsNegativeWeightCycle = false;
         M = DPTable;
