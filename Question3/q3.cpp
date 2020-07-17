@@ -60,7 +60,7 @@ public:
        int weight = 0;
        for (Edge e : edges){
            if(e.sourceNode == src && e.destinationNode == dst){
-               cout << "weigth: " << e.weight << endl;
+               // cout << "weigth: " << e.weight << endl;
                weight = e.weight;
            }
        }
@@ -110,12 +110,6 @@ public:
         return destinationNode;
     }
     bool buildDPTable(){
-        //neg cycle the false 
-        if (false)
-        {
-            return false;
-        }
-
         // create DPTable 2d array
         int n = G.getNumberOfNodes();
         
@@ -149,8 +143,21 @@ public:
                 }
             }
         }
-
+        // check for negative cycle
+        for(int i = 0; i < n; i++)
+        {
+            if (i != destinationNode)
+            {
+                if(G.getWeightOfEdge(i,destinationNode)!=0 && G.getWeightOfEdge(i,destinationNode)!=0 > DPTable[n-1][i])
+                {
+                    cout << "Graph contains negative weight cycle!" << endl;
+                    graphContainsNegativeWeightCycle = true;
+                    return false;
+                }
+            }
+        }
         // set M to DPTable
+        graphContainsNegativeWeightCycle = false;
         M = DPTable;
         return true;
     }
@@ -186,11 +193,6 @@ public:
         int shortestPathValue = M[G.getNumberOfNodes()-1][sourceNode];
         cout << endl << "Shortest path value from " << sourceNode << " to " << destinationNode << ": " << shortestPathValue << endl;
 
-
-        // tabloda yukarı doğru incele
-        // -6, -2, 0 ,0
-        // 2 3 4 5 diye yükselmiş
-        // belki bir kural çıkar
         vector<int> shortestPath = {sourceNode};
 
         int node = sourceNode;
@@ -212,10 +214,9 @@ public:
         cout << endl << "Shortest path from " << sourceNode << " to " << destinationNode << ": ";
         for(auto n: shortestPath)
         {
-            string if_destination =  n == shortestPath.back() ? "\n" : " -> ";
-            cout << n << if_destination;
+            string arrow_or_newline =  n == shortestPath.back() ? "\n" : " -> ";
+            cout << n << arrow_or_newline;
         }
-        
     }
 };
 
