@@ -149,7 +149,7 @@ public:
                 }
             }
         }
-        
+
         // set M to DPTable
         M = DPTable;
         return true;
@@ -183,7 +183,38 @@ public:
     }
     
     void printShortestPathBetweenSourceAndDestination(){
-        // Fill here
+        int shortestPathValue = M[G.getNumberOfNodes()-1][sourceNode];
+        cout << endl << "Shortest path value from " << sourceNode << " to " << destinationNode << ": " << shortestPathValue << endl;
+
+
+        // tabloda yukarı doğru incele
+        // -6, -2, 0 ,0
+        // 2 3 4 5 diye yükselmiş
+        // belki bir kural çıkar
+        vector<int> shortestPath = {sourceNode};
+
+        int node = sourceNode;
+        int iter = G.getNumberOfNodes() - 1;
+        while (node != destinationNode)
+        {
+            for(auto e : G.getOutgoingEdges(node))
+            {
+                if(M[iter][e.destinationNode] == M[iter][node] - e.weight)
+                {
+                    node = e.destinationNode;
+                    iter -= 1;
+                    shortestPath.push_back(node);
+                    break;
+                }
+            }
+        }
+
+        cout << endl << "Shortest path from " << sourceNode << " to " << destinationNode << ": ";
+        for(auto n: shortestPath)
+        {
+            string if_destination =  n == shortestPath.back() ? "\n" : " -> ";
+            cout << n << if_destination;
+        }
         
     }
 };
