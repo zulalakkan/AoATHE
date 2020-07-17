@@ -37,15 +37,41 @@ int Graph::overflowingVertex(){
 }
 
 void Graph::initializePreflow(int source){
-    // IMPLEMENT HERE
+    for(int v = 0; v < nodeCount; v++)
+    {
+        height[v] = 0;
+        excess[v] = 0;
+    }
+    flow.assign(nodeCount, vector<int>(nodeCount, 0));
+
+    height[source] = nodeCount;
+    for(int v= 0; v < nodeCount && v != source; v++)
+    {
+        flow[s][v] = capacity[s][v];
+        excess[v] = capacity[s][v];
+        excess[s] -= capacity[s][v];
+    }
 }
 
 void Graph::push(int u, int v){
-    // IMPLEMENT HERE
+    int residualCapacity = capacity[u][v] - flow[u][v];
+    int delta = excess[u] < residualCapacity ? excess[u] : residualCapacity;
+    flow[u][v] += delta;
+    flow[v][u] += delta;
+    excess[u] -= delta;
+    excess[v] += delta;
 }
 
 void Graph::relabel(int u){
-    // IMPLEMENT HERE
+    int min = height[u];
+    for (int v = 0; v < nodeCount; v++)
+    {
+        if(capacity[u][v] - flow[u][v] > 0)
+        {
+            if(height[v] < min) min = height[v];
+        }
+    }
+    height[u] = min + 1;
 }
 
 int Graph::findMaxFlow(){
