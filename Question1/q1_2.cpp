@@ -130,27 +130,23 @@ int getMinMaxIndex(vector<int>&arr,int first, int last, bool isMin)
 
 void min_max_sort(vector<int>& arr, int first, int last)
 {
-    if (last <= first)
+    for(int i = first, j = last; i < j; i++, j--) // iterative approach
     {
-        return;
+        int min_index = getMinMaxIndex(arr,i,j,true); // get min index
+        int max_index = getMinMaxIndex(arr,i,j,false); // get max index
+
+        cout << "Min: " << arr[min_index] << " Max: " << arr[max_index] << endl;
+
+        // swap min and first
+        int temp = arr[min_index];
+        arr[min_index] = arr[i];
+        arr[i] = temp;
+        
+        temp = arr[max_index];
+        arr[max_index] = arr[j];
+        arr[j] = temp;
+
     }
-    
-    int min_index = getMinMaxIndex(arr,first,last,true); // get min index
-    int max_index = getMinMaxIndex(arr,first,last,false); // get max index
-
-    cout << "Min: " << arr[min_index] << " Max: " << arr[max_index] << endl;
-
-    // swap min and first
-    int temp = arr[min_index];
-    arr[min_index] = arr[first];
-    arr[first] = temp;
-    
-    // swap max and last
-    temp = arr[max_index];
-    arr[max_index] = arr[last];
-    arr[last] = temp;
-
-    min_max_sort(arr, first+1, last -1);
 
 }
 
